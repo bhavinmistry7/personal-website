@@ -1,0 +1,374 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── BASE LAYER ─────────────────────────────────────────────────────────────── */
+@layer base {
+  :root {
+    --bg:             #ffffff;
+    --bg-subtle:      #f5f5f4;
+    --bg-card:        #fafaf9;
+    --border:         #e7e5e4;
+    --text:           #0c0a09;
+    --text-muted:     #78716c;
+    /* Accent — bright yellow. Single token drives all accent uses site-wide. */
+    --gold:           #FFE600;
+    /* Aurora tokens */
+    --aurora-opacity: 0.04;      /* barely-there in light mode */
+    --bg-rgb:         255,255,255;
+    /* Glass UI tokens — shared between nav pill and all liquid-glass panels */
+    --glass-fill:     rgba(255, 255, 255, 0.62);   /* primary tint (top of gradient) */
+    --glass-fill-2:   rgba(255, 255, 255, 0.40);   /* secondary tint (bottom) */
+    --glass-border:   rgba(255, 255, 255, 0.65);   /* rim border */
+    --glass-shine:    rgba(255, 255, 255, 0.90);   /* top-edge specular line */
+    --glass-glow:     rgba(255, 230, 0, 0.06);     /* accent glow */
+    --glass-inset-t:  rgba(255, 255, 255, 0.90);   /* inner top highlight */
+    --glass-inset-b:  rgba(0,   0,   0,   0.04);   /* inner bottom shadow */
+    --glass-shadow:   0 4px 20px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.05);
+    --glass-blur:     blur(5px) saturate(1.5);
+  }
+
+  .dark {
+    --bg:             #000000;   /* pure black — lava sits on true black */
+    --bg-subtle:      #0a0a0a;
+    --bg-card:        #0d0d0d;
+    --border:         #1a1a1a;
+    --text:           rgba(255, 255, 255, 0.88);  /* translucent white — lava glows through */
+    --text-muted:     rgba(255, 255, 255, 0.50);
+    --gold:           #FFE600;   /* same bright yellow in dark mode */
+    --aurora-opacity: 1;
+    /* Glass UI tokens — dark mode (primary use-case: black starfield bg) */
+    --glass-fill:     rgba(255, 255, 255, 0.065);  /* very low white tint */
+    --glass-fill-2:   rgba(255, 255, 255, 0.028);
+    --glass-border:   rgba(255, 255, 255, 0.20);
+    --glass-shine:    rgba(255, 255, 255, 0.18);
+    --glass-glow:     rgba(255, 230, 0, 0.10);
+    --glass-inset-t:  rgba(255, 255, 255, 0.14);   /* stronger catch-light */
+    --glass-inset-b:  rgba(0,   0,   0,   0.25);   /* depth shadow */
+    --glass-shadow:   0 8px 32px rgba(0,0,0,0.40), 0 2px 8px rgba(0,0,0,0.25);
+    --glass-blur:     blur(5px) saturate(1.8);
+    --bg-rgb:         0,0,0;
+  }
+
+  * {
+    @apply border-stone-200 dark:border-stone-800;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body), system-ui, sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading), Georgia, serif;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: var(--gold);
+    color: #000;   /* black text on bright yellow for legibility */
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar        { width: 4px; }
+  ::-webkit-scrollbar-track  { background: var(--bg); }
+  ::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ── Aurora blob keyframes ── */
+  @keyframes aurora-float-1 {
+    0%,  100% { transform: translate(0px,  0px)   scale(1);    }
+    25%        { transform: translate(50px, -40px)  scale(1.08); }
+    50%        { transform: translate(20px,  30px)  scale(0.96); }
+    75%        { transform: translate(-30px, 10px)  scale(1.04); }
+  }
+  @keyframes aurora-float-2 {
+    0%,  100% { transform: translate(0px,  0px)   scale(1);    }
+    33%        { transform: translate(-50px, 40px)  scale(1.06); }
+    66%        { transform: translate(40px, -20px)  scale(0.94); }
+  }
+  @keyframes aurora-float-3 {
+    0%,  100% { transform: translate(0px,  0px)   scale(1);    }
+    40%        { transform: translate(30px, -50px)  scale(1.1);  }
+    80%        { transform: translate(-40px, 20px)  scale(0.92); }
+  }
+
+  /* Reduce motion — pause aurora & soften all transitions */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-play-state: paused !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ─── COMPONENT LAYER ────────────────────────────────────────────────────────── */
+@layer components {
+  /* Section label with accent line */
+  .section-label {
+    @apply inline-flex items-center gap-2 text-xs font-medium tracking-[0.2em] uppercase;
+    color: var(--gold);
+  }
+  .section-label::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background-color: var(--gold);
+  }
+
+  /* ── Liquid Glass system ────────────────────────────────────────────────────
+   *
+   *  Two classes share the same surface treatment:
+   *    .card        — interactive cards (ProjectCard, VaultCard, experience rows)
+   *    .glass-panel — non-interactive panels (CTA boxes, email box, form container)
+   *
+   *  How the illusion works:
+   *    1. Background: diagonal gradient of two very-low-alpha white tints creates
+   *       the translucent "fill". Backdrop-filter blurs + saturates whatever is
+   *       behind the element, letting the starfield/aurora read through.
+   *    2. Border: thin semi-transparent rim. The ::before overlay adds a diagonal
+   *       catch-light across the top-left corner — the "bending" refraction hint.
+   *    3. Inner highlights: inset box-shadows — bright at top, dark at bottom —
+   *       add depth and make the surface feel like floating glass.
+   *    4. Elevation: outer box-shadow lifts the panel off the background.
+   *
+   *  Tuning:
+   *    • Blur intensity  → --glass-blur  (change the px value in blur())
+   *    • Edge refraction → ::before gradient stop-opacities
+   *    • Tint darkness   → --glass-fill / --glass-fill-2 alpha
+   * ─────────────────────────────────────────────────────────────────────────── */
+
+  .card,
+  .glass-panel {
+    position: relative;
+    background: linear-gradient(140deg, var(--glass-fill) 0%, var(--glass-fill-2) 100%);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+    box-shadow:
+      inset 0  1px 0 var(--glass-inset-t),
+      inset 0 -1px 0 var(--glass-inset-b),
+      var(--glass-shadow);
+  }
+
+  /* Diagonal catch-light overlay — simulates light bending around the glass rim.
+   * Brighter + wider band: highlight covers ~60% of the surface from top-left,
+   * with a secondary glow at bottom-right for a full wraparound refraction look. */
+  .card::before,
+  .glass-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+      140deg,
+      rgba(255, 255, 255, 0.22) 0%,
+      transparent              60%,
+      transparent              70%,
+      rgba(255, 255, 255, 0.10) 100%
+    );
+    pointer-events: none;
+  }
+
+  .card {
+    @apply rounded-2xl transition-all duration-300;
+  }
+
+  /* ── Dark mode hover: vivid yellow bloom ──────────────────────────────────
+   *  Tune glow intensity by adjusting the outer box-shadow radii + alphas.     */
+  .dark .card:hover,
+  .dark .glass-panel:hover {
+    border-color: rgba(255, 230, 0, 0.55);
+    box-shadow:
+      inset 0  1px 0 var(--glass-inset-t),
+      inset 0 -1px 0 var(--glass-inset-b),
+      var(--glass-shadow),
+      0 0 0  1px rgba(255, 230, 0, 0.30),
+      0 0 18px   rgba(255, 230, 0, 0.22),
+      0 0 45px   rgba(255, 230, 0, 0.13),
+      0 0 80px   rgba(255, 230, 0, 0.07);
+  }
+
+  /* ── Light mode hover: animated rainbow border ────────────────────────────
+   *  The ::after overlay with a mask shows only the 1.5 px border ring.
+   *  Tune rainbow speed → animation-duration in :hover::after below.          */
+  :root:not(.dark) .card:hover,
+  :root:not(.dark) .glass-panel:hover {
+    border-color: transparent;   /* hide glass rim — rainbow takes over */
+    box-shadow:
+      inset 0  1px 0 var(--glass-inset-t),
+      inset 0 -1px 0 var(--glass-inset-b),
+      var(--glass-shadow);
+  }
+
+  /* Rainbow ring pseudo-element — always present in light mode, invisible at rest */
+  :root:not(.dark) .card::after,
+  :root:not(.dark) .glass-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: repeating-linear-gradient(
+      90deg,
+      #ff0000   0px,
+      #ff7700  60px,
+      #ffee00 120px,
+      #00cc00 180px,
+      #0066ff 240px,
+      #8800ff 300px,
+      #ff0000 360px
+    );
+    /* Mask clips gradient to the border ring only — content area is transparent */
+    mask:              linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite:    exclude;
+    -webkit-mask:      linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  :root:not(.dark) .card:hover::after,
+  :root:not(.dark) .glass-panel:hover::after {
+    opacity: 1;
+    animation: rainbow-flow 2s linear infinite;
+  }
+
+  /* One repeating-gradient cycle = 360 px; shifting -360 px loops seamlessly */
+  @keyframes rainbow-flow {
+    from { background-position: 0 0; }
+    to   { background-position: -360px 0; }
+  }
+
+  /* Fallback: when backdrop-filter is unsupported, use a more opaque solid fill */
+  @supports not (backdrop-filter: blur(1px)) {
+    .card,
+    .glass-panel {
+      background: var(--bg-card);
+      border-color: var(--border);
+    }
+  }
+
+  .text-gold   { color: var(--gold); }
+  .border-gold { border-color: var(--gold); }
+
+  /* Tags */
+  .tag {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    background-color: var(--bg-subtle);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+  .tag-gold {
+    background-color: rgba(255, 230, 0, 0.10);
+    color: var(--gold);
+    border-color: rgba(255, 230, 0, 0.28);
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200;
+    background: linear-gradient(135deg, #FFCC00, #FFE600);
+    color: #000;   /* black text on yellow for legibility */
+  }
+  .btn-primary:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(255, 230, 0, 0.40);
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200;
+    border: 1px solid var(--border);
+    color: var(--text);
+    background-color: transparent;
+  }
+  .btn-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* Container */
+  .container-site {
+    @apply w-full mx-auto px-6 md:px-10 lg:px-16;
+    max-width: 1200px;
+  }
+}
+
+/* ─── UTILITY LAYER ──────────────────────────────────────────────────────────── */
+@layer utilities {
+  /* Hero fade-in animations (used on homepage hero) */
+  .animate-in {
+    animation: fade-up 0.6s ease forwards;
+  }
+  .stagger-1 { animation-delay: 0.1s; }
+  .stagger-2 { animation-delay: 0.2s; }
+  .stagger-3 { animation-delay: 0.3s; }
+  .stagger-4 { animation-delay: 0.4s; }
+  .stagger-5 { animation-delay: 0.5s; }
+
+  /* Gradient text — neutral */
+  .text-gradient {
+    background: linear-gradient(135deg, var(--text) 0%, var(--text-muted) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Gradient text — yellow/gold */
+  .text-gradient-gold {
+    background: linear-gradient(135deg, #FFE600 0%, #FFCC00 50%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Subtle grid overlay */
+  .bg-grid {
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Noise texture */
+  .bg-noise::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+  .bg-noise { position: relative; }
+
+  /* Aurora glow helper — used by AuroraBackground blobs */
+  .aurora-blob {
+    position: absolute;
+    border-radius: 9999px;
+    will-change: transform;
+    pointer-events: none;
+    opacity: calc(var(--aurora-opacity) * 0.45);
+  }
+
+  /*
+   * Site-wide liquid background opacity.
+   * light mode: --aurora-opacity 0.04  (barely-there ambient tint)
+   * dark  mode: --aurora-opacity 1.0   (full-strength lava on pure black)
+   */
+  .site-bg-opacity {
+    opacity: var(--aurora-opacity);
+  }
+}
