@@ -15,9 +15,6 @@ export function Footer() {
             <p className="font-heading text-2xl mb-3" style={{ color: 'var(--gold)' }}>
               {site.shortName}<span style={{ color: 'var(--gold)' }}>.</span>
             </p>
-            <p className="text-sm" style={{ color: 'var(--text)' }}>
-              {footer.tagline}
-            </p>
           </div>
 
           {/* Navigation */}

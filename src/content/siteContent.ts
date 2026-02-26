@@ -76,7 +76,7 @@ export const site = {
   seo: {
     description:
       'Cybersecurity consultant and creative director. I help organizations build resilient digital infrastructure and craft compelling visual narratives.',
-    ogImage: '/public/about.jpg',
+    ogImage: '/about.JPG',
   },
 } as const
 
