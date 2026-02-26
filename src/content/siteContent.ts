@@ -86,7 +86,7 @@ export const site = {
 
 export const home = {
   hero: {
-    heading:   site.name,
+    heading: site.name,
     roles: ['Technology Consultant', 'Content Creator'],
     tagline:
       'Hi - welcome to my page. Scroll to explore!',
@@ -400,7 +400,7 @@ export const contact = {
   },
   intro: 'Feel free to email me to chat!',
   subjects: [
-    'Coffee Chat',
+    'Coffee Chats',
     'Creative Direction',
     'Photography / Video',
     'Speaking / Advisory',

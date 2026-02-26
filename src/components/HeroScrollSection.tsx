@@ -143,20 +143,6 @@ export function HeroScrollSection() {
         {/* text-center + items centering cascade to all child elements */}
         <div className="container-site relative z-10 text-center">
 
-          {/* ── Availability pill ────────────────────────────────────────── */}
-          <motion.div
-            style={reducedMotion ? {} : { opacity: combinedSupportOpacity, y: combinedSupportY }}
-            className="mb-10"
-          >
-            <div
-              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border text-xs font-medium"
-              style={{ borderColor: 'var(--border)', color: 'var(--text-muted)' }}
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              {home.hero.availability}
-            </div>
-          </motion.div>
-
           {/* ── Morphing heading ─────────────────────────────────────────── */}
           {/*
             Pattern: an invisible spacer holds the layout height so the
