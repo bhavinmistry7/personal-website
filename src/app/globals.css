@@ -11,8 +11,8 @@
     --border:         #e7e5e4;
     --text:           #0c0a09;
     --text-muted:     #78716c;
-    /* Accent — bright yellow. Single token drives all accent uses site-wide. */
-    --gold:           #FFE600;
+    /* Accent — near-black in light mode so yellow text/icons are legible on white. */
+    --gold:           #111111;
     /* Aurora tokens */
     --aurora-opacity: 0.04;      /* barely-there in light mode */
     --bg-rgb:         255,255,255;
@@ -74,8 +74,8 @@
   }
 
   ::selection {
-    background-color: var(--gold);
-    color: #000;   /* black text on bright yellow for legibility */
+    background-color: #FFE600;   /* always bright yellow regardless of mode */
+    color: #000;
   }
 
   /* Scrollbar */
@@ -277,6 +277,16 @@
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }
 
+  /* Light mode: solid white pill with dark text — no translucency, fully legible */
+  :root:not(.dark) .tag-gold {
+    background-color: #ffffff;
+    color: #111111;
+    border-color: rgba(0, 0, 0, 0.12);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    opacity: 1;
+  }
+
   /* Buttons */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium transition-all duration-200;
@@ -327,12 +337,19 @@
     background-clip: text;
   }
 
-  /* Gradient text — yellow/gold */
+  /* Gradient text — yellow/gold (dark mode) */
   .text-gradient-gold {
     background: linear-gradient(135deg, #FFE600 0%, #FFCC00 50%, #FFA500 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  /* Light mode: flatten gradient to near-black for legibility on white */
+  :root:not(.dark) .text-gradient-gold {
+    background: none;
+    -webkit-text-fill-color: #111111;
+    color: #111111;
   }
 
   /* Subtle grid overlay */

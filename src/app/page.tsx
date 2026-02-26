@@ -98,9 +98,8 @@ function AboutSection() {
                 boxShadow: '0 24px 64px rgba(0,0,0,0.22), inset 0 1px 0 var(--glass-inset-t)',
               }}
             >
-              {/* TODO: drop your photo at /public/images/about.jpg */}
               <Image
-                src="/images/about.jpg"
+                src="/about.JPG"
                 alt={site.name}
                 fill
                 className="object-cover"
@@ -379,7 +378,7 @@ function WorkSection() {
             </SectionReveal>
             <SectionReveal delay={80}>
               <h2 className="font-heading text-5xl md:text-6xl lg:text-7xl leading-[1.0]" style={{ color: 'var(--text)' }}>
-                Consulting<br /><em>Projects</em>
+                Personal<br /><em>Projects</em>
               </h2>
             </SectionReveal>
           </div>
@@ -404,7 +403,7 @@ function WorkSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {featured.map((project, i) => (
             <SectionReveal key={project.id} delay={200 + i * 80}>
-              <ProjectCard project={{ ...project, href: '/work' }} featured />
+              <ProjectCard project={project} featured />
             </SectionReveal>
           ))}
         </div>

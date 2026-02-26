@@ -1,10 +1,11 @@
 'use client'
 
-import { useState }  from 'react'
-import { FadeIn }    from '@/components/FadeIn'
-import { MediaCard } from '@/components/MediaCard'
-import { media }     from '@/content/siteContent'
-import type { MediaItem } from '@/content/siteContent'
+import { useState, useMemo } from 'react'
+import { FadeIn }            from '@/components/FadeIn'
+import { MediaCard }         from '@/components/MediaCard'
+import { MediaLightbox }     from '@/components/MediaLightbox'
+import { media }             from '@/content/siteContent'
+import type { MediaItem }    from '@/content/siteContent'
 
 function FilterButton({
   label, active, onClick,
@@ -25,6 +26,28 @@ function FilterButton({
 export function MediaGrid() {
   const [activeFilter, setActiveFilter] = useState('All')
 
+  // Lightbox state
+  const [lightboxGroup, setLightboxGroup] = useState<MediaItem[] | null>(null)
+  const [lightboxIndex, setLightboxIndex] = useState(0)
+
+  // Group all image items by title — used for prev/next navigation
+  const groupsByTitle = useMemo(() => {
+    const groups: Record<string, MediaItem[]> = {}
+    media.items.forEach((item) => {
+      if (!item.src) return
+      if (!groups[item.title]) groups[item.title] = []
+      groups[item.title].push(item)
+    })
+    return groups
+  }, [])
+
+  function openLightbox(item: MediaItem) {
+    const group = groupsByTitle[item.title] ?? [item]
+    const idx   = group.findIndex((i) => i.id === item.id)
+    setLightboxGroup(group)
+    setLightboxIndex(Math.max(0, idx))
+  }
+
   const allItems: MediaItem[] = activeFilter === 'All'
     ? media.items
     : media.items.filter((item) => item.category === activeFilter)
@@ -34,6 +57,17 @@ export function MediaGrid() {
 
   return (
     <>
+      {/* Lightbox overlay */}
+      {lightboxGroup && (
+        <MediaLightbox
+          items={lightboxGroup}
+          index={lightboxIndex}
+          onClose={() => setLightboxGroup(null)}
+          onPrev={() => setLightboxIndex((i) => Math.max(0, i - 1))}
+          onNext={() => setLightboxIndex((i) => Math.min(lightboxGroup.length - 1, i + 1))}
+        />
+      )}
+
       {/* Filters */}
       <div className="container-site mb-10">
         <FadeIn>
@@ -57,8 +91,11 @@ export function MediaGrid() {
             <FadeIn><p className="section-label">Featured</p></FadeIn>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {featured.map((item, i) => (
-                <FadeIn key={item.id} delay={i * 80}>
-                  <MediaCard item={item} />
+                <FadeIn key={item.id} delay={i * 40} duration={400}>
+                  <MediaCard
+                    item={item}
+                    onClick={item.src ? () => openLightbox(item) : undefined}
+                  />
                 </FadeIn>
               ))}
             </div>
@@ -76,8 +113,11 @@ export function MediaGrid() {
         {rest.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {rest.map((item, i) => (
-              <FadeIn key={item.id} delay={i * 50}>
-                <MediaCard item={item} />
+              <FadeIn key={item.id} delay={i * 25} duration={400}>
+                <MediaCard
+                  item={item}
+                  onClick={item.src ? () => openLightbox(item) : undefined}
+                />
               </FadeIn>
             ))}
           </div>

@@ -7,8 +7,13 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, featured = false }: ProjectCardProps) {
-  const Wrapper = project.href ? Link : 'div'
-  const wrapperProps = project.href ? { href: project.href } : {}
+  const isExternal   = project.href?.startsWith('http')
+  const Wrapper      = project.href ? (isExternal ? 'a' : Link) : 'div'
+  const wrapperProps = project.href
+    ? isExternal
+      ? { href: project.href, target: '_blank', rel: 'noopener noreferrer' }
+      : { href: project.href }
+    : {}
 
   return (
     // @ts-expect-error — dynamic tag
@@ -19,7 +24,7 @@ export function ProjectCard({ project, featured = false }: ProjectCardProps) {
       {/* Top row */}
       <div className="flex items-start justify-between gap-4 mb-4">
         <p className="text-xs font-medium tracking-widest uppercase" style={{ color: 'var(--text-muted)' }}>
-          {project.client} · {project.year}
+          {project.category} · {project.year}
         </p>
         {project.href && (
           <svg
@@ -65,11 +70,32 @@ export function ProjectCard({ project, featured = false }: ProjectCardProps) {
       )}
 
       {/* Tags */}
-      <div className="flex flex-wrap gap-1.5">
+      <div className={`flex flex-wrap gap-1.5 ${project.href ? 'mb-4' : ''}`}>
         {project.tags.map((tag) => (
           <span key={tag} className="tag">{tag}</span>
         ))}
       </div>
+
+      {/* CTA — active when href is set; greyed-out placeholder when href is '' */}
+      {project.href !== undefined && (
+        project.href ? (
+          /* Active: real URL provided — opens externally */
+          <div className="flex items-center gap-1.5 text-xs font-medium text-gold">
+            <span>Visit Project</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-200 group-hover:translate-x-0.5">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+        ) : (
+          /* TODO: replace href: '' with the actual project URL in siteContent.ts */
+          <div className="flex items-center gap-1.5 text-xs font-medium" style={{ color: 'var(--text-muted)', opacity: 0.45, cursor: 'default' }}>
+            <span>Visit Project</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </div>
+        )
+      )}
     </Wrapper>
   )
 }

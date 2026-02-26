@@ -6,8 +6,9 @@
 export type MediaItem = {
   id:        string
   title:     string
-  category:  'Photography' | 'Video' | 'Events' | 'Travel'
+  category:  'Photography' | 'Video' | 'Events' | 'Travel' | 'Concerts' | 'Graduation' | 'Personal'
   year:      string
+  src?:      string   // image path (e.g. '/images/photo.jpg') or YouTube URL
   href?:     string
   featured?: boolean
 }
@@ -15,7 +16,7 @@ export type MediaItem = {
 export type Project = {
   id:          string
   title:       string
-  client:      string
+  category:    'Web Programming' | 'Data Analytics' | 'Software Engineering' | 'Product' | 'Media'
   tags:        string[]
   description: string
   year:        string
@@ -27,7 +28,7 @@ export type VaultItem = {
   id:          string
   title:       string
   description: string
-  category:    'Tools' | 'Reading' | 'Notes' | 'Templates' | 'Courses'
+  category:    'Tools' | 'Reading' | 'Notes' | 'Templates' | 'Courses' | 'Content'
   tags:        string[]
   href:        string
   free:        boolean
@@ -57,8 +58,8 @@ export type Experience = {
 export const site = {
   // ── IDENTITY ────────────────────────────────────────────────────────────────
   name: 'Bhavin Mistry',        // Full display name
-  shortName: 'BM',             // Initials / logo text
-  role: 'Cybersecurity Consultant & Creative Director',
+  shortName: 'Bhavin Mistry',             // Initials / logo text
+  role: 'Technology Consultant & Creative Director',
   location: 'New Jersey / New York',
   email: 'bhavinmistry198@gmail.com',
   url: 'https://yoursite.com', // No trailing slash
@@ -75,7 +76,7 @@ export const site = {
   seo: {
     description:
       'Cybersecurity consultant and creative director. I help organizations build resilient digital infrastructure and craft compelling visual narratives.',
-    ogImage: '/public/IMG_9405.JPG',
+    ogImage: '/public/about.jpg',
   },
 } as const
 
@@ -85,11 +86,10 @@ export const site = {
 
 export const home = {
   hero: {
-    availability: 'Available for select projects',
     heading:   site.name,
     roles: ['Technology Consultant', 'Content Creator'],
     tagline:
-      'Hi - welcome to my page. I am currently a technology consultant at Crowee LLP, owner of my own media business, and also love creating content!',
+      'Hi - welcome to my page. Scroll to explore!',
     cta: {
       primary:   { text: 'View Work',  href: '/work' },
       secondary: { text: 'View Media', href: '/media' },
@@ -98,10 +98,10 @@ export const home = {
 
   about: {
     label: 'About',
-    heading: 'Two disciplines.\nOne perspective.',
+    heading: 'The art of multiple passions',
     body: [
-      'I operate at the intersection of security and creativity. By day I help enterprises navigate complex threat landscapes — zero trust, incident response, and security architecture for organizations that cannot afford to be wrong.',
-      'Outside the terminal, I document the world through a lens. Photography, videography, and content creation. The same precision that makes a good security engineer makes a good visual storyteller.',
+      'My whole life, I have been told to pick a niche and stick with it. As I enter my mid 20s, I\'ve decided to respectfully decline that advice. All my interests, passions, and projects exist on this page.',
+      'From playing with new technologies, creating content, using my camera to tell my favorite stories, my deep passion for sports, and the world of fitness, this site encompasses every aspect of me, and offers resources for anyone looking to pursue the same interests.',
     ],
     cta: { text: 'Get in touch', href: '/contact' },
   },
@@ -182,7 +182,7 @@ export const education = {
       school:   'New Jersey Institute of Technology',
       logo:     '/njit-new-jersey-institute-of-technology-logo-png_seeklogo-452334.png',   // TODO: drop logo at /public/logos/edu-2.png and set path here
       degree:   'Masters of Science, Computer Science',
-      dates:    '20226 – 2028',
+      dates:    '2026 – 2028',
       location: 'Newark, NJ',
     },
   ] satisfies EducationItem[],
@@ -233,9 +233,9 @@ export const experience = {
       startDate: 'Jan 2021',
       endDate:   'Jul 2022',
       bullets: [
-        'Analyzed 50,000+ political survey responses using Python to perform data cleaning, aggregation, and statistical analysis, uncovering demographic trends and voter preferences that informed targeted campaign strategies and outreach initiatives',
-        'Developed a predictive voter behavior model using Scikit-learn to analyze correlations between demographic factors and political views, enabling data-driven predictions of voting patterns and contributing to a 25% increase in voter turnout',
-        'Engineered an automated data pipeline using Python to extract and transform raw VAN campaign data into geospatial voter maps, and created dashboards in Google Data Studio and Tableau to visualize political insights for strategic decision-making',
+        'Build and scale media business to $10,000+ annual revenue (2025) across 10+ clients by defining service offerings, pricing strategy, and iterating based on client feedback to expand capabilities from photography to multi-camera live streaming productions',
+        'Manage client relationships and project scope for 50+ deliverables, including private events and commercial projects, gathering requirements during discovery calls and coordinating production workflows with vendors to meet deadlines',
+        'Design and operate streaming infrastructure for 5+ collegiate competitions reaching 5,000+ viewers, managing real-time video switching and audio mixing to deliver a seamless viewing experience with zero technical downtime during live events',
       ] as [string, string, string],
     },
   ] satisfies Experience[],
@@ -249,64 +249,31 @@ export const work = {
   hero: {
     label:      'Selected Work',
     heading:    'Personal Projects',
-    subheading: 'Security consulting, risk assessment, and digital resilience for organizations that cannot afford to be wrong.',
+    subheading: 'Projects I\'ve built, shipped, or contributed to, spanning application development, data, and creative work.',
   },
-  filterTags: ['All', 'Cybersecurity', 'Architecture', 'Red Team', 'Compliance', 'Strategy'],
+  filterTags: ['All', 'Web Programming', 'Data Analytics', 'Software Engineering', 'Product', 'Media'],
   projects: [
     {
       id:          'p-1',
-      title:       'Zero Trust Architecture',
-      client:      'Financial Services',
-      tags:        ['Cybersecurity', 'Architecture', 'Zero Trust'],
-      description: 'Designed and implemented a zero-trust security model for a mid-market financial firm, reducing attack surface by 60% and achieving SOC 2 Type II compliance.',
-      year:        '2024',
-      outcomes:    ['60% attack surface reduction', 'SOC 2 Type II certified', 'Zero breaches post-deployment'],
+      title:       'Personal Website / Portfolio',
+      category:    'Web Programming',
+      tags:        ['Web Development', 'AI Agent'],
+      description: 'Designed and built my own website from scratch using Next.js, TypeScript, and Tailwind CSS, no templates. The goal was to build a single place that reflects both sides of what I do: security consulting and creative work. It has a project portfolio, media gallery, resource vault, and contact form, all deployed live on Vercel',
+      year:        'February 2026',
+      outcomes:    ['Demonstrated full-stack product development skills, owning the entire lifecycle from requirements and design to deployment'],
+      href:        'https://github.com/bhavinmistry7/personal-website',   // TODO: replace with actual project URL
     },
     {
       id:          'p-2',
-      title:       'Incident Response Program',
-      client:      'Healthcare Network',
-      tags:        ['Compliance', 'IR', 'HIPAA'],
-      description: 'Built an incident response program from the ground up for a regional healthcare network, cutting mean time to detect from weeks to hours.',
-      year:        '2024',
-      outcomes:    ['MTTR reduced by 80%', 'HIPAA compliant', 'Playbooks for 12 incident types'],
+      title:       'Soccer Shot Analysis and Visualization',
+      category:    'Data Analytics',
+      tags:        ['Data Analytics', 'Sports'],
+      description: 'Built a football analytics tool that lets you ask questions about player performance in plain English and get back real visualizations, shot maps, pass maps, heat maps. Feed it a question like "how does Haaland shoot from inside the box?" and it returns an actual chart, not just a number. Powered by Python and trained on 1,200+ shot records from real match data.',
+      year:        'September 2024',
+      outcomes:    ['Demonstrated end-to-end product thinking, from data pipeline design to user-facing interaction — applying Python, data visualization, and AI to turn raw football data into something actually useful and fun to use'],
+      href:        'https://github.com/bhavinmistry7/Footy',  
     },
-    {
-      id:          'p-3',
-      title:       'Red Team Assessment',
-      client:      'SaaS Platform',
-      tags:        ['Red Team', 'Penetration Testing', 'AppSec'],
-      description: 'Led a comprehensive red team engagement uncovering critical vulnerabilities across a high-growth SaaS platform before their Series B.',
-      year:        '2023',
-      outcomes:    ['14 critical CVEs discovered', 'Full remediation roadmap', 'Series B security posture certified'],
-    },
-    {
-      id:          'p-4',
-      title:       'Cloud Security Migration',
-      client:      'E-commerce Retailer',
-      tags:        ['Cybersecurity', 'Architecture', 'Strategy'],
-      description: 'Guided a major e-commerce retailer through a full cloud security migration, designing IAM policies, network segmentation, and secrets management.',
-      year:        '2023',
-      outcomes:    ['PCI DSS compliant', 'Zero-downtime migration', '40% infra cost reduction'],
-    },
-    {
-      id:          'p-5',
-      title:       'Security Awareness Program',
-      client:      'Professional Services Firm',
-      tags:        ['Strategy', 'Compliance'],
-      description: 'Designed and delivered a company-wide security awareness program including phishing simulations, training modules, and a CISO reporting framework.',
-      year:        '2023',
-      outcomes:    ['90% training completion', 'Phishing click rate reduced by 70%', 'Board-level reporting implemented'],
-    },
-    {
-      id:          'p-6',
-      title:       'Threat Intelligence Platform',
-      client:      'Technology Company',
-      tags:        ['Cybersecurity', 'Strategy', 'Architecture'],
-      description: 'Architected a custom threat intelligence aggregation platform integrating open-source and commercial feeds into a unified SIEM workflow.',
-      year:        '2022',
-      outcomes:    ['Real-time threat feeds from 15 sources', '3x faster incident triage', 'Fully automated IOC enrichment'],
-    },
+    
   ] satisfies Project[],
 }
 
@@ -318,22 +285,73 @@ export const media = {
   hero: {
     label:      'Media',
     heading:    'Photography\n& Film',
-    subheading: 'Visual work spanning architecture, portraiture, events, and travel. Shot on digital and 35mm film.',
+    subheading: 'Full media portfolio, which encompasses concerts, private events, dance teams, graduation shoots, and more',
   },
-  filterTags: ['All', 'Photography', 'Video', 'Events', 'Travel'],
+  filterTags: ['All', 'Concerts', 'Graduation', 'Personal', 'Travel'],
   items: [
-    { id: 'm-1',  title: 'NAV @ Noto, Philadelphia',          category: 'Photography', year: '2026', featured: true },
-    { id: 'm-2',  title: 'NAV @ Noto, Philadelphia',             category: 'Photography', year: '2026', featured: true },
-    { id: 'm-3',  title: 'NAV @ Noto, Philadelphia',         category: 'Video',       year: '2026', featured: true },
-    { id: 'm-4',  title: 'Portolan',                 category: 'Photography', year: '2025' },
-    { id: 'm-5',  title: 'Minimalist Series Vol. 2', category: 'Photography', year: '2025' },
-    { id: 'm-6',  title: 'Year-End Event Reel',      category: 'Events',      year: '2025' },
-    { id: 'm-7',  title: 'Marrakech Dispatch',       category: 'Travel',      year: '2023' },
-    { id: 'm-8',  title: 'Abstract Geometries',      category: 'Photography', year: '2023' },
-    { id: 'm-9',  title: 'Conference Keynote Film',  category: 'Video',       year: '2023' },
-    { id: 'm-10', title: 'Tokyo Fragments',          category: 'Travel',      year: '2022' },
-    { id: 'm-11', title: 'Corporate Event: Summit',  category: 'Events',      year: '2022' },
-    { id: 'm-12', title: 'Grain Study',              category: 'Photography', year: '2022' },
+    { id: 'm-1',  title: 'NAV @ Noto, Philadelphia', category: 'Concerts', year: '2026', src: '/DSC01206-Enhanced-NR.jpg', featured: true },
+    { id: 'm-2',  title: 'NAV @ Noto, Philadelphia', category: 'Concerts', year: '2026', src: '/DSC01253-Enhanced-NR.jpg', featured: true },
+    { id: 'm-3',  title: 'NAV @ Noto, Philadelphia', category: 'Concerts', year: '2026', src: '/DSC01423-Enhanced-NR.jpg', featured: true },
+    { id: 'm-4',  title: 'NAV @ Noto, Philadelphia', category: 'Concerts', year: '2026', src: '/DSC01699-Enhanced-NR.jpg' },
+    { id: 'm-5',  title: 'NAV @ Noto, Philadelphia', category: 'Concerts', year: '2026', src: '/DSC01901-Enhanced-NR.jpg' },
+    { id: 'm-6',  title: 'NAV @ Noto, Philadelphia', category: 'Concerts', year: '2026', src: '/DSC01939-Enhanced-NR.jpg' },
+    { id: 'm-7',  title: 'NAV @ Noto, Philadelphia', category: 'Concerts', year: '2026', src: '/DSC02039-Enhanced-NR.jpg' },
+    { id: 'm-8',  title: 'NAV @ Noto, Philadelphia', category: 'Concerts', year: '2026', src: '/DSC02142-2-Enhanced-NR.jpg' },
+    { id: 'm-9',  title: 'NAV @ Noto, Philadelphia',  category: 'Concerts',    year: '2026', src: '/DSC02160-Enhanced-NR.jpg' },
+    // ── Graduation Shoots 2025 ─────────────────────────────────────────────
+    { id: 'm-13', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02713-Enhanced-NR.jpg' },
+    { id: 'm-14', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02743-Enhanced-NR.jpg', featured: true },
+    { id: 'm-15', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02753-Enhanced-NR.jpg', featured: true },
+    { id: 'm-16', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02764-Enhanced-NR.jpg' },
+    { id: 'm-17', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02781-Enhanced-NR.jpg' },
+    { id: 'm-18', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02792-Enhanced-NR.jpg' },
+    { id: 'm-19', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02801-Enhanced-NR.jpg' },
+    { id: 'm-20', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02839-Enhanced-NR.jpg' },
+    { id: 'm-21', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02855-Enhanced-NR.jpg' },
+    { id: 'm-22', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02893-Enhanced-NR.jpg' },
+    { id: 'm-23', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02918-Enhanced-NR.jpg' },
+    { id: 'm-24', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02924-Enhanced-NR.jpg' },
+    { id: 'm-25', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02934-Enhanced-NR.jpg' },
+    { id: 'm-26', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02949-Enhanced-NR.jpg' },
+    { id: 'm-27', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02955-Enhanced-NR.jpg' },
+    { id: 'm-28', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC02986-Enhanced-NR.jpg' },
+    { id: 'm-29', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC09052-Enhanced-NR.jpg' },
+    { id: 'm-30', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC09061-Enhanced-NR.jpg' },
+    { id: 'm-31', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC09071-Enhanced-NR.jpg' },
+    { id: 'm-32', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC09072-Enhanced-NR.jpg' },
+    { id: 'm-33', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC09073-Enhanced-NR.jpg' },
+    { id: 'm-34', title: 'Graduation Shoots 2025', category: 'Graduation', year: '2025', src: '/DSC09172-Enhanced-NR.jpg' },
+    // ── Koad @ Rutgers University 2024 ────────────────────────────────────
+    { id: 'm-35', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09675-Enhanced-NR.jpg', featured: true },
+    { id: 'm-36', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09753.jpg' },
+    { id: 'm-37', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09756.jpg' },
+    { id: 'm-38', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09783-2.jpg' },
+    { id: 'm-39', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09788.jpg' },
+    { id: 'm-40', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09841.jpg' },
+    { id: 'm-41', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09878.jpg' },
+    { id: 'm-42', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09915-Enhanced-NR.jpg' },
+    { id: 'm-43', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09985.jpg' },
+    { id: 'm-44', title: 'Koad @ Rutgers University', category: 'Concerts', year: '2024', src: '/DSC09996.jpg' },
+    // ── San Francisco, CA 2024 ────────────────────────────────────────────
+    { id: 'm-45', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09035-Enhanced-NR.jpg' },
+    { id: 'm-46', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09038-Enhanced-NR.jpg' },
+    { id: 'm-47', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09047-Enhanced-NR.jpg' },
+    { id: 'm-48', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09050-Enhanced-NR.jpg' },
+    { id: 'm-49', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09100-Enhanced-NR.jpg' },
+    { id: 'm-50', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09180-Enhanced-NR.jpg' },
+    { id: 'm-51', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09339-Enhanced-NR.jpg' },
+    { id: 'm-52', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09348-Enhanced-NR.jpg' },
+    { id: 'm-53', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09349-Enhanced-NR.jpg' },
+    { id: 'm-54', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09356-Enhanced-NR.jpg' },
+    { id: 'm-55', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09369-Enhanced-NR.jpg' },
+    { id: 'm-56', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09375-Enhanced-NR.jpg' },
+    { id: 'm-57', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09381-Enhanced-NR.jpg' },
+    { id: 'm-58', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09385-Enhanced-NR.jpg' },
+    { id: 'm-59', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09503-Enhanced-NR.jpg' },
+    { id: 'm-60', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09628-Enhanced-NR.jpg' },
+    { id: 'm-61', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09728-Enhanced-NR.jpg' },
+    { id: 'm-62', title: 'San Francisco, CA', category: 'Travel', year: '2024', src: '/DSC09748-Enhanced-NR.jpg' },
+  
   ] satisfies MediaItem[],
 }
 
@@ -355,72 +373,19 @@ export const vault = {
       description: 'An article by Dan Koe explaining the steps to maximize having interests in multiple fields. It teaches you multiple interests are a superpower - not a deficiency.',
       category:    'Reading',
       tags:        ['Self-Development', 'Content Creation'],
-      href:        '#',
+      href:        'https://x.com/thedankoe/status/2010042119121957316',
       free:        true,
     },
     {
       id:          'v-2',
-      title:       'Incident Response Playbook',
+      title:       'A Motorcycle for the Mind: Naval Ravikant\'s AI Episode',
       description: 'A battle-tested IR playbook covering 12 common incident scenarios, escalation paths, and communication templates.',
-      category:    'Templates',
-      tags:        ['IR', 'Compliance', 'Templates'],
-      href:        '#',
-      free:        false,
-    },
-    {
-      id:          'v-3',
-      title:       'Essential Cybersecurity Reading List',
-      description: 'Books, papers, and blogs that shaped my approach to security. Regularly updated with new additions.',
-      category:    'Reading',
-      tags:        ['Security', 'Learning', 'Books'],
-      href:        '#',
+      category:    'Content',
+      tags:        ['Technology', 'Self-Help', 'Podcasts'],
+      href:        'https://x.com/naval/status/2024700227111047581?s=20',
       free:        true,
     },
-    {
-      id:          'v-4',
-      title:       'Photography Workflow in Lightroom',
-      description: 'My end-to-end culling and editing workflow in Lightroom Classic, including preset packs and export settings.',
-      category:    'Notes',
-      tags:        ['Photography', 'Lightroom', 'Workflow'],
-      href:        '#',
-      free:        true,
-    },
-    {
-      id:          'v-5',
-      title:       'SIEM & Detection Engineering Resources',
-      description: 'Curated list of detection rules, sigma queries, and SIEM tuning guides I reference in client engagements.',
-      category:    'Tools',
-      tags:        ['SIEM', 'Detection', 'Blue Team'],
-      href:        '#',
-      free:        true,
-    },
-    {
-      id:          'v-6',
-      title:       'Creative Brief Template',
-      description: 'My standard creative brief for video and photo projects — keeps clients aligned and shoots on schedule.',
-      category:    'Templates',
-      tags:        ['Creative', 'Production', 'Templates'],
-      href:        '#',
-      free:        false,
-    },
-    {
-      id:          'v-7',
-      title:       'Threat Modeling with STRIDE',
-      description: 'A practical guide to threat modeling using the STRIDE framework, with worked examples for web and API applications.',
-      category:    'Notes',
-      tags:        ['Threat Modeling', 'Security', 'STRIDE'],
-      href:        '#',
-      free:        true,
-    },
-    {
-      id:          'v-8',
-      title:       'Open Source Security Tools Stack',
-      description: 'My personally vetted list of open-source security tools for recon, scanning, monitoring, and analysis.',
-      category:    'Tools',
-      tags:        ['Open Source', 'Tools', 'Security'],
-      href:        '#',
-      free:        true,
-    },
+   
   ] satisfies VaultItem[],
 }
 
@@ -433,14 +398,14 @@ export const contact = {
     label:   'Contact',
     heading: 'Let\'s Work\nTogether',
   },
-  intro: 'I\'m available for security consulting engagements, creative projects, speaking, and advisory roles. Fill out the form or reach out directly.',
+  intro: 'Feel free to email me to chat!',
   subjects: [
-    'Security Consulting',
-    'Penetration Testing / Red Team',
+    'Coffee Chat',
     'Creative Direction',
     'Photography / Video',
     'Speaking / Advisory',
-    'Other',
+    'Brand Partnerships',
+    'Other'
   ],
   email: site.email,
   social: site.social,

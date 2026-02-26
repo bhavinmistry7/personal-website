@@ -26,7 +26,7 @@ export function WorkGrid() {
 
   const filtered = activeFilter === 'All'
     ? work.projects
-    : work.projects.filter((p) => p.tags.some((t) => t === activeFilter))
+    : work.projects.filter((p) => p.category === activeFilter)
 
   return (
     <>

@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef, useEffect }                                    from 'react'
-import { motion, useScroll, useTransform, useReducedMotion }    from 'framer-motion'
+import { useRef, useEffect }                                                      from 'react'
+import { motion, useScroll, useTransform, useReducedMotion, useMotionValue, animate } from 'framer-motion'
 import Link                                                      from 'next/link'
 import { home }                                                  from '@/content/siteContent'
 
@@ -55,26 +55,75 @@ export function HeroScrollSection() {
     offset:  ['start start', 'end end'],
   })
 
-  // ── "Bhavin Mistry" exits ────────────────────────────────────────────────
-  // Exit remapped to 0.80 (was 0.44) so the fade uses most of the 50vh
-  // scroll room — keeps the same physical scroll feel as before.
+  // ── "Bhavin Mistry" scroll-exit ──────────────────────────────────────────
   const nameOpacity = useTransform(scrollYProgress, [0, 0.12, 0.80], [1, 1, 0])
   const nameY       = useTransform(scrollYProgress, [0.12, 0.80],     [0, -44])
   const nameScale   = useTransform(scrollYProgress, [0.12, 0.80],     [1, 0.93])
   const nameBlurRaw = useTransform(scrollYProgress, [0.12, 0.80],     [0, 9])
-  const nameFilter  = useTransform(nameBlurRaw, (v) => `blur(${v}px)`)
+
+  // ── "Bhavin Mistry" load-in entrance (time-based, 3 s) ──────────────────
+  // Combined with the scroll-exit values so both can coexist:
+  //   opacity / scale: Math.min(loadValue, scrollValue) — most constrained wins
+  //   blur:            loadBlur + scrollBlur — additive
+  const loadOpacity        = useMotionValue(0)
+  const loadScale          = useMotionValue(0.9)
+  const loadBlur           = useMotionValue(10)
+  const loadSupportOpacity = useMotionValue(0)
+  const loadSupportY       = useMotionValue(12)
+
+  useEffect(() => {
+    if (reducedMotion) {
+      loadOpacity.set(1);        loadScale.set(1);  loadBlur.set(0)
+      loadSupportOpacity.set(1); loadSupportY.set(0)
+      return
+    }
+    // Name: fades/scales/unblurs in over 3 s immediately
+    const c1 = animate(loadOpacity, 1, { duration: 3,   ease: 'easeOut' })
+    const c2 = animate(loadScale,   1, { duration: 3,   ease: 'easeOut' })
+    const c3 = animate(loadBlur,    0, { duration: 3,   ease: 'easeOut' })
+    // Support content: fades up 1 s after name starts, over 1.5 s
+    const c4 = animate(loadSupportOpacity, 1, { duration: 1.5, ease: 'easeOut', delay: 1 })
+    const c5 = animate(loadSupportY,       0, { duration: 1.5, ease: 'easeOut', delay: 1 })
+    return () => { c1.stop(); c2.stop(); c3.stop(); c4.stop(); c5.stop() }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reducedMotion])
+
+  const combinedNameOpacity = useTransform(
+    [loadOpacity, nameOpacity],
+    ([load, scroll]: number[]) => Math.min(load, scroll),
+  )
+  const combinedNameScale = useTransform(
+    [loadScale, nameScale],
+    ([load, scroll]: number[]) => Math.min(load, scroll),
+  )
+  const combinedNameBlurRaw = useTransform(
+    [loadBlur, nameBlurRaw],
+    ([load, scroll]: number[]) => load + scroll,
+  )
+  const combinedNameFilter = useTransform(combinedNameBlurRaw, (v: number) => `blur(${v}px)`)
 
   // ── Support content (pill + roles + tagline + CTAs) ─────────────────────
-  // Exit remapped to 0.65 (was 0.38) proportionally to new scroll range.
-  const supportOpacity = useTransform(scrollYProgress, [0, 0.04, 0.30, 0.65], [0, 1, 1, 0])
+  // Entrance is now time-based (load animation above).
+  // These scroll-driven values only handle the exit (start at 1 / 0).
+  const supportOpacity = useTransform(scrollYProgress, [0.30, 0.65], [1, 0])
   const supportY       = useTransform(scrollYProgress, [0.30, 0.65], [0, -24])
+
+  // Combined: Math.min for opacity (most constrained wins); add for Y
+  const combinedSupportOpacity = useTransform(
+    [loadSupportOpacity, supportOpacity],
+    ([load, scroll]: number[]) => Math.min(load, scroll),
+  )
+  const combinedSupportY = useTransform(
+    [loadSupportY, supportY],
+    ([load, scroll]: number[]) => (load as number) + (scroll as number),
+  )
 
   // ── Scroll hint ──────────────────────────────────────────────────────────
   const hintOpacity = useTransform(scrollYProgress, [0, 0.04, 0.16], [0, 1, 0])
 
   return (
-    // 120vh outer — 20vh of scroll room (~1 scroll gesture to reach About)
-    <div ref={containerRef} style={{ height: '120vh', position: 'relative' }}>
+    // 122vh outer — ~22vh of scroll room
+    <div ref={containerRef} style={{ height: '122vh', position: 'relative' }}>
       <section
         id="hero"
         aria-label="hero"
@@ -96,7 +145,7 @@ export function HeroScrollSection() {
 
           {/* ── Availability pill ────────────────────────────────────────── */}
           <motion.div
-            style={reducedMotion ? {} : { opacity: supportOpacity, y: supportY }}
+            style={reducedMotion ? {} : { opacity: combinedSupportOpacity, y: combinedSupportY }}
             className="mb-10"
           >
             <div
@@ -130,10 +179,10 @@ export function HeroScrollSection() {
               style={{
                 fontSize: 'clamp(4rem, 12vw, 10rem)',
                 ...(reducedMotion ? {} : {
-                  opacity: nameOpacity,
+                  opacity: combinedNameOpacity,
                   y:       nameY,
-                  scale:   nameScale,
-                  filter:  nameFilter,
+                  scale:   combinedNameScale,
+                  filter:  combinedNameFilter,
                 }),
               }}
             >
@@ -144,7 +193,7 @@ export function HeroScrollSection() {
 
           {/* ── Roles + tagline + CTAs ───────────────────────────────────── */}
           <motion.div
-            style={reducedMotion ? {} : { opacity: supportOpacity, y: supportY }}
+            style={reducedMotion ? {} : { opacity: combinedSupportOpacity, y: combinedSupportY }}
           >
             {/* Roles */}
             <div className="flex flex-wrap items-center gap-3 mb-8 justify-center">

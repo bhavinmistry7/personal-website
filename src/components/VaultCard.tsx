@@ -35,6 +35,12 @@ const icons: Record<string, React.ReactNode> = {
       <path d="M6 12v5c3 3 9 3 12 0v-5"/>
     </svg>
   ),
+  Content: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M15 10l4.553-2.277A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14"/>
+      <rect x="2" y="6" width="13" height="12" rx="2"/>
+    </svg>
+  ),
 }
 
 interface VaultCardProps {
@@ -71,7 +77,7 @@ export function VaultCard({ item }: VaultCardProps) {
     >
       {/* Thumbnail — bleeds to card edges */}
       {showThumbnail && (
-        <div className="-mx-0 overflow-hidden rounded-t-xl mb-0">
+        <div className="relative z-10 -mx-0 overflow-hidden rounded-t-xl mb-0">
           <img
             src={thumbnail!}
             alt=""
