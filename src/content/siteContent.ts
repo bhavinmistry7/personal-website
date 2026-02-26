@@ -230,8 +230,8 @@ export const experience = {
       logo:      '/mistry png.png',
       location:  'Freehold, NJ',
       jobTitle:  'Owner',
-      startDate: 'Jan 2021',
-      endDate:   'Jul 2022',
+      startDate: 'September 2021',
+      endDate:   'Present',
       bullets: [
         'Build and scale media business to $10,000+ annual revenue (2025) across 10+ clients by defining service offerings, pricing strategy, and iterating based on client feedback to expand capabilities from photography to multi-camera live streaming productions',
         'Manage client relationships and project scope for 50+ deliverables, including private events and commercial projects, gathering requirements during discovery calls and coordinating production workflows with vendors to meet deadlines',

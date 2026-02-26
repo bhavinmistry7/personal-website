@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { Instrument_Serif, Inter } from 'next/font/google'
 import './globals.css'
-import { Nav }            from '@/components/Nav'
-import { Footer }         from '@/components/Footer'
-import { SiteBackground } from '@/components/SiteBackground'
-import { site }           from '@/content/siteContent'
+import { Nav }                 from '@/components/Nav'
+import { Footer }              from '@/components/Footer'
+import { SiteBackground }      from '@/components/SiteBackground'
+import { PixelTrailOverlay }   from '@/components/PixelTrailOverlay'
+import { site }                from '@/content/siteContent'
 
 // ─── FONTS ───────────────────────────────────────────────────────────────────
 const instrumentSerif = Instrument_Serif({
@@ -81,6 +82,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
 
         <Footer />
+
+        {/* z-9999 fixed canvas overlay — pointer-events:none so nothing is blocked */}
+        <PixelTrailOverlay />
       </body>
     </html>
   )

@@ -102,6 +102,12 @@
     80%        { transform: translate(-40px, 20px)  scale(0.92); }
   }
 
+  /* ── About photo floating animation ── */
+  @keyframes float-photo {
+    0%, 100% { transform: translate3d(0,   0px, 0); }
+    50%       { transform: translate3d(0, -12px, 0); }
+  }
+
   /* Reduce motion — pause aurora & soften all transitions */
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
@@ -387,5 +393,23 @@
    */
   .site-bg-opacity {
     opacity: var(--aurora-opacity);
+  }
+
+  /* About photo float */
+  .about-photo-float {
+    animation: float-photo 5s ease-in-out infinite;
+    will-change: transform;
+  }
+
+  /* Experience logo badge overrides */
+  /* Crowe: white background in dark mode so the dark logo is visible */
+  .dark .exp-logo-crowe {
+    background-color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.25) !important;
+  }
+  /* Bhavin Mistry Media: dark background in light mode so the light logo is visible */
+  :root:not(.dark) .exp-logo-bmm {
+    background-color: #1a1a1a !important;
+    border-color: rgba(0, 0, 0, 0.25) !important;
   }
 }

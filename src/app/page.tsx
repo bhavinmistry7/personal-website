@@ -6,6 +6,8 @@ import { ScrollProgress }                      from '@/components/ScrollProgress
 import { SectionNav }                          from '@/components/SectionNav'
 import { HeroScrollSection }                   from '@/components/HeroScrollSection'
 import { ScrollSection, SectionReveal }        from '@/components/ScrollSection'
+import { FadeIn }                              from '@/components/FadeIn'
+import { TiltCard }                            from '@/components/TiltCard'
 import { ProjectCard }                         from '@/components/ProjectCard'
 import { MediaCard }                           from '@/components/MediaCard'
 import { VaultCard }                           from '@/components/VaultCard'
@@ -90,24 +92,28 @@ function AboutSection() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 
           {/* Left: profile photo */}
-          <SectionReveal>
-            <div
-              className="relative aspect-[3/4] w-full max-w-sm mx-auto lg:mx-0 rounded-3xl overflow-hidden"
-              style={{
-                border:    '1px solid var(--glass-border)',
-                boxShadow: '0 24px 64px rgba(0,0,0,0.22), inset 0 1px 0 var(--glass-inset-t)',
-              }}
-            >
-              <Image
-                src="/about.JPG"
-                alt={site.name}
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 80vw, 40vw"
-                priority
-              />
+          <FadeIn direction="left">
+            <div className="about-photo-float w-full max-w-sm mx-auto lg:mx-0">
+              <TiltCard
+                className="rounded-3xl"
+                style={{
+                  border:    '1px solid var(--glass-border)',
+                  boxShadow: '0 24px 64px rgba(0,0,0,0.22), inset 0 1px 0 var(--glass-inset-t)',
+                }}
+              >
+                <div className="relative aspect-[3/4] w-full rounded-3xl overflow-hidden">
+                  <Image
+                    src="/about.JPG"
+                    alt={site.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 80vw, 40vw"
+                    priority
+                  />
+                </div>
+              </TiltCard>
             </div>
-          </SectionReveal>
+          </FadeIn>
 
           {/* Right: label + heading + body + CTA */}
           <div className="space-y-6">
@@ -289,15 +295,19 @@ function ExperienceSection() {
                   <div className="md:w-52 flex-shrink-0">
                     {/* Logo or letter monogram */}
                     <div
-                      className="relative w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center mb-4"
+                      className={`relative w-12 h-12 rounded-xl overflow-hidden flex items-center justify-center mb-4${
+                        item.id === 'exp-1' ? ' exp-logo-crowe'
+                        : item.id === 'exp-3' ? ' exp-logo-bmm'
+                        : ''
+                      }`}
                       style={{ backgroundColor: 'var(--bg-subtle)', border: '1px solid var(--border)' }}
                     >
                       {item.logo ? (
                         <Image
                           src={item.logo}
                           alt={`${item.company} logo`}
-                          width={32}
-                          height={32}
+                          width={44}
+                          height={44}
                           className="object-contain"
                         />
                       ) : (

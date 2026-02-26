@@ -3,8 +3,9 @@
 import Link            from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState }    from 'react'
-import { ThemeToggle } from './ThemeToggle'
-import { site, nav }   from '@/content/siteContent'
+import { ThemeToggle }       from './ThemeToggle'
+import { PixelTrailToggle }  from './PixelTrailToggle'
+import { site, nav }         from '@/content/siteContent'
 
 // ─── Liquid glass nav link ────────────────────────────────────────────────────
 //
@@ -172,6 +173,7 @@ export function Nav() {
 
         {/* Right side */}
         <div className="flex items-center gap-2">
+          <PixelTrailToggle />
           <ThemeToggle />
 
           {/* Mobile hamburger */}

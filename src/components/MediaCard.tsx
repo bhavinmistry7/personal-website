@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { MediaItem } from '@/content/siteContent'
 import { getYouTubeThumbnailUrl } from '@/lib/thumbnails'
+import { TiltCard } from '@/components/TiltCard'
 
 // Category → gradient color map (shown when no src is provided)
 const categoryGradients: Record<string, string> = {
@@ -92,7 +93,8 @@ export function MediaCard({ item, onClick }: MediaCardProps) {
       : {}
 
   return (
-    // @ts-expect-error — dynamic tag
+    <TiltCard className="rounded-2xl w-full">
+    {/* @ts-expect-error — dynamic tag */}
     <Wrapper
       {...wrapperProps}
       className="group block rounded-2xl overflow-hidden cursor-pointer w-full text-left"
@@ -166,5 +168,6 @@ export function MediaCard({ item, onClick }: MediaCardProps) {
         </p>
       </div>
     </Wrapper>
+    </TiltCard>
   )
 }

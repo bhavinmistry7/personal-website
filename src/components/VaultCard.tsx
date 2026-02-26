@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import type { VaultItem } from '@/content/siteContent'
 import { getYouTubeThumbnailUrl } from '@/lib/thumbnails'
+import { TiltCard } from '@/components/TiltCard'
 
 // Category icons
 const icons: Record<string, React.ReactNode> = {
@@ -68,6 +69,7 @@ export function VaultCard({ item }: VaultCardProps) {
   const isExternal = item.href && item.href !== '#'
 
   return (
+    <TiltCard className="rounded-2xl">
     <a
       href={isExternal ? item.href : undefined}
       target={isExternal ? '_blank' : undefined}
@@ -130,5 +132,6 @@ export function VaultCard({ item }: VaultCardProps) {
         </div>
       </div>
     </a>
+    </TiltCard>
   )
 }
