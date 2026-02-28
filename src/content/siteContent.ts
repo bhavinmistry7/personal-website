@@ -379,7 +379,7 @@ export const vault = {
     {
       id:          'v-2',
       title:       'A Motorcycle for the Mind: Naval Ravikant\'s AI Episode',
-      description: 'A battle-tested IR playbook covering 12 common incident scenarios, escalation paths, and communication templates.',
+      description: 'Naval Ravikants new podcast about how AI and vibe coding is becoming the new product management',
       category:    'Content',
       tags:        ['Technology', 'Self-Help', 'Podcasts'],
       href:        'https://x.com/naval/status/2024700227111047581?s=20',

@@ -161,7 +161,7 @@ export function HeroScrollSection() {
 
             {/* Semantic h1: "bhavin mistry" — morphs out on scroll */}
             <motion.h1
-              className="absolute inset-x-0 top-0 font-heading leading-[1.1] tracking-[-0.04em] lowercase text-gradient-gold"
+              className="absolute inset-x-0 top-0 font-heading leading-[1.1] tracking-[-0.04em] lowercase text-gradient-gold hero-name"
               style={{
                 fontSize: 'clamp(4rem, 12vw, 10rem)',
                 ...(reducedMotion ? {} : {

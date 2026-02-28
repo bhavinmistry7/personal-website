@@ -358,6 +358,15 @@
     color: #111111;
   }
 
+  /* Hero name — deep blue in dark mode only */
+  .dark .hero-name {
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: #1D4ED8;
+    color: #1D4ED8;
+  }
+
   /* Subtle grid overlay */
   .bg-grid {
     background-image:
