@@ -1,54 +1,33 @@
 import type { Config } from 'tailwindcss'
 
+// Editorial palette: near-black, off-white paper, chrome. No accent color.
 const config: Config = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
-  darkMode: 'class',
+  content: ['./src/**/*.{ts,tsx,mdx}'],
   theme: {
     extend: {
-      fontFamily: {
-        heading: ['var(--font-heading)', 'Georgia', 'serif'],
-        body:    ['var(--font-body)', 'system-ui', 'sans-serif'],
-      },
-      // ─── ACCENT COLOR ────────────────────────────────────────────────────────────
-      // Current theme: Black + Aurora (violet/indigo).
-      // Swap out this palette to retheme the entire site.
       colors: {
-        accent: {
-          50:  '#fffde7',
-          100: '#fff9c4',
-          200: '#fff59d',
-          300: '#fff176',
-          400: '#ffee58',
-          500: '#FFE600',   // primary bright yellow
-          600: '#FFD600',
-          700: '#FFC400',
-          800: '#FFAB00',
-          900: '#FF8F00',
-          950: '#FF6F00',
+        ink:    '#0A0A0A',
+        paper:  '#F2F2F0',
+        chrome: {
+          50:  '#F7F8F9',
+          200: '#DADDE1',
+          400: '#A9ADB3',
+          600: '#6E737A',
         },
+        mute: '#6B6B68',   // secondary text on paper
       },
-      // ─── SPACING & LAYOUT ────────────────────────────────────────────────────────
-      maxWidth: {
-        site: '1200px',
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'ui-monospace', 'monospace'],
       },
-      // ─── ANIMATIONS ──────────────────────────────────────────────────────────────
-      keyframes: {
-        'fade-up': {
-          '0%':   { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
-        },
-        'fade-in': {
-          '0%':   { opacity: '0' },
-          '100%': { opacity: '1' },
-        },
+      fontSize: {
+        // The 10–11px uppercase "spec sheet" voice used for almost everything
+        micro: ['0.6875rem', { lineHeight: '1rem', letterSpacing: '0.06em' }],
+        // Product-name size: name in the hero, project titles
+        name:  ['0.9375rem', { lineHeight: '1.25rem', letterSpacing: '0.02em' }],
       },
-      animation: {
-        'fade-up': 'fade-up 0.6s ease forwards',
-        'fade-in': 'fade-in 0.5s ease forwards',
+      transitionTimingFunction: {
+        out: 'cubic-bezier(0.16, 1, 0.3, 1)',
       },
     },
   },

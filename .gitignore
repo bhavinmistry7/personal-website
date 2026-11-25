@@ -33,3 +33,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# Full-resolution photo originals (kept local, never committed)
+originals/
+
+# Local review material (contact sheets etc.), never committed
+/_review
