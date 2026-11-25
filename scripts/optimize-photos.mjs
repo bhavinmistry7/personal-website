@@ -10,7 +10,8 @@
 //
 // Input:  originals/*.jpg  (gitignored, never deployed)
 // Output: public/photos/<slug>.jpg      2400px long edge, mozjpeg q80, metadata stripped
-//         src/content/photos.generated.json   { [slug]: { src, width, height, blurDataURL } }
+//         src/content/photos.generated.json   { [slug]: { src, width, height, color } }
+//         color = dominant colour, used as the loading background
 //
 // next/image then serves AVIF/WebP at the exact width each device needs.
 
@@ -47,8 +48,12 @@ const existing = new Set(await readdir(OUT_DIR))
 const files = (await readdir(SRC_DIR))
   .filter((f) => /\.(jpe?g|png|tiff?)$/i.test(f))
   .filter((f) => !filter || f.includes(filter))
-  // --prune: only build used photos that aren't built yet
-  .filter((f) => !used || (used.has(slugify(f)) && !(manifest[slugify(f)] && existing.has(`${slugify(f)}.jpg`))))
+  // --prune: only build used photos that aren't built yet (or predate the colour field)
+  .filter((f) => {
+    if (!used) return true
+    const slug = slugify(f), m = manifest[slug]
+    return used.has(slug) && !(m && m.color && existing.has(`${slug}.jpg`))
+  })
 
 for (const file of files) {
   const slug = slugify(file)
@@ -61,19 +66,17 @@ for (const file of files) {
     .toBuffer({ resolveWithObject: true })
   await writeFile(path.join(OUT_DIR, `${slug}.jpg`), data)
 
-  const blur = await input
-    .clone()
-    .resize({ width: 16, height: 16, fit: 'inside' })
-    .webp({ quality: 40 })
-    .toBuffer()
+  // Dominant colour (sharp's histogram-based estimate) → flat loading background
+  const { dominant: { r, g, b } } = await sharp(data).stats()
+  const color = '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('')
 
   manifest[slug] = {
-    src:         `/photos/${slug}.jpg`,
-    width:       info.width,
-    height:      info.height,
-    blurDataURL: `data:image/webp;base64,${blur.toString('base64')}`,
+    src:    `/photos/${slug}.jpg`,
+    width:  info.width,
+    height: info.height,
+    color,
   }
-  console.log(`${file} → ${slug}.jpg  ${info.width}×${info.height}  ${(data.length / 1024).toFixed(0)} KB`)
+  console.log(`${file} → ${slug}.jpg  ${info.width}×${info.height}  ${(data.length / 1024).toFixed(0)} KB  ${color}`)
 }
 
 if (used) {

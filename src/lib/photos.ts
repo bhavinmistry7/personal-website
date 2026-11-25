@@ -4,7 +4,7 @@ export type Photo = {
   src:         string
   width:       number
   height:      number
-  blurDataURL: string
+  color:       string   // dominant colour, shown while the image loads
 }
 
 const photos = manifest as Record<string, Photo>

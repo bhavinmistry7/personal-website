@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import Image from 'next/image'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import type { Photo } from '@/lib/photos'
 
 /** A photo that rises and unmasks from the bottom edge as it scrolls into view. */
@@ -26,25 +26,23 @@ export function RevealImage({
   const scale    = useTransform(p, [0, 1], [1.12, 1])
 
   return (
-    <motion.button
+    <m.button
       ref={ref}
       type="button"
       onClick={onOpen}
       aria-label={`Open ${alt}`}
-      className="relative block w-full cursor-zoom-in overflow-hidden bg-ink/5"
-      style={{ aspectRatio: `${photo.width} / ${photo.height}`, ...(reduced ? {} : { clipPath, y }) }}
+      className="relative block w-full cursor-zoom-in overflow-hidden"
+      style={{ aspectRatio: `${photo.width} / ${photo.height}`, backgroundColor: photo.color, ...(reduced ? {} : { clipPath, y }) }}
     >
-      <motion.div className="absolute inset-0" style={reduced ? undefined : { scale }}>
+      <m.div className="absolute inset-0" style={reduced ? undefined : { scale }}>
         <Image
           src={photo.src}
           alt={alt}
           fill
           sizes={sizes}
-          placeholder="blur"
-          blurDataURL={photo.blurDataURL}
           className="object-cover"
         />
-      </motion.div>
-    </motion.button>
+      </m.div>
+    </m.button>
   )
 }

@@ -1,3 +1,4 @@
+import { trackClick } from '@/lib/track'
 import { booking, profile, links, visible } from '@/content/site'
 import { MaskReveal } from './MaskReveal'
 import { ArrowUpRight } from './Icons'
@@ -26,7 +27,7 @@ export function BookMe({ n }: { n: string }) {
         <dl className="mt-[12svh] grid grid-cols-2 border-t border-white/20 md:grid-cols-4">
           {booking.stats.map((s, i) => (
             <div key={s.label} className={`border-b border-white/20 py-6 md:border-b-0 md:py-8 ${i % 2 === 0 ? 'pr-3' : 'border-l border-white/20 pl-3'} ${i > 0 ? 'md:border-l md:pl-6' : ''}`}>
-              <dt className="label text-white/45">{s.label}</dt>
+              <dt className="label text-white/60">{s.label}</dt>
               <dd className="mt-2 text-[clamp(2rem,6vw,4.5rem)] font-medium leading-none tracking-[-0.04em]">{s.value}</dd>
             </div>
           ))}
@@ -36,8 +37,7 @@ export function BookMe({ n }: { n: string }) {
         <div className="mt-[10svh] flex flex-col items-center gap-4">
           <a
             href={mailto}
-            data-link-id="book"
-            data-placement="outro"
+            {...trackClick('book', 'outro')}
             className="chrome-fill group flex h-14 w-full max-w-[26rem] items-center justify-between rounded-[3px] px-5 text-ink transition-transform duration-300 ease-out active:scale-[0.985]"
           >
             <span className="text-[13px] font-medium uppercase tracking-[0.06em]">{booking.cta}</span>
@@ -50,11 +50,11 @@ export function BookMe({ n }: { n: string }) {
 
         {/* Footer */}
         <footer className="pb-safe mt-[18svh] grid gap-4 border-t border-white/20 pt-4 md:grid-cols-[1fr_auto_1fr] md:items-center">
-          <p className="label text-white/45">© {year} {profile.name}</p>
+          <p className="label text-white/60">© {year} {profile.name}</p>
           <ul className="flex flex-wrap gap-x-4 gap-y-2">
             {visible(links).filter((l) => l.href).map((l) => (
               <li key={l.id}>
-                <a href={l.href} data-link-id={l.id} data-placement="footer" target="_blank" rel={l.sponsored ? 'sponsored noopener noreferrer' : 'noopener noreferrer'} className="label text-white/60 transition-colors hover:text-white">
+                <a href={l.href} {...trackClick(l.id, 'footer')} target="_blank" rel={l.sponsored ? 'sponsored noopener noreferrer' : 'noopener noreferrer'} className="label text-white/60 transition-colors hover:text-white">
                   {l.label}
                 </a>
               </li>

@@ -25,7 +25,7 @@ export function VideoCard({ video, poster, pending }: { video: Video; poster: Ph
         className="object-cover"
       />
     ) : poster ? (
-      <Image src={poster.src} alt="" fill sizes="(min-width: 768px) 30vw, 80vw" placeholder="blur" blurDataURL={poster.blurDataURL} className="object-cover" />
+      <Image src={poster.src} alt="" fill sizes="(min-width: 768px) 30vw, 80vw" className="object-cover" />
     ) : null
 
   const overlay = (
@@ -44,7 +44,7 @@ export function VideoCard({ video, poster, pending }: { video: Video; poster: Ph
 
   return (
     <figure>
-      <div className={`group relative ${aspect} overflow-hidden bg-ink`}>
+      <div className={`group relative ${aspect} overflow-hidden bg-ink`} style={poster ? { backgroundColor: poster.color } : undefined}>
         {video.platform === 'youtube' ? (
           playing ? (
             <iframe

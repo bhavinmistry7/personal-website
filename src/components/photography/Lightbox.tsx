@@ -74,8 +74,6 @@ export function Lightbox({
               alt={item.caption}
               fill
               sizes="100vw"
-              placeholder="blur"
-              blurDataURL={item.photo.blurDataURL}
               className="object-contain"
             />
           </div>

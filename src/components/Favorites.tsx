@@ -1,3 +1,4 @@
+import { trackClick } from '@/lib/track'
 import Image from 'next/image'
 import type { Favorite, LinkItem } from '@/content/site'
 import { isPending } from '@/content/site'
@@ -20,16 +21,14 @@ export function Favorites({
         <ul className="mx-auto grid max-w-5xl grid-cols-2 gap-x-3 gap-y-12 md:grid-cols-3 md:gap-x-6 md:gap-y-20">
           {items.map((item, i) => (
             <li key={item.id}>
-              <a href={item.href || undefined} data-link-id={item.id} data-placement="favorites" target="_blank" rel="sponsored noopener noreferrer" className="group block">
-                <div className="relative aspect-[4/5] overflow-hidden bg-white">
+              <a href={item.href || undefined} {...trackClick(item.id, 'favorites')} target="_blank" rel="sponsored noopener noreferrer" className="group block">
+                <div className="relative aspect-[4/5] overflow-hidden bg-white" style={item.photo ? { backgroundColor: item.photo.color } : undefined}>
                   {item.photo ? (
                     <Image
                       src={item.photo.src}
                       alt={item.name}
                       fill
                       sizes="(min-width: 768px) 33vw, 50vw"
-                      placeholder="blur"
-                      blurDataURL={item.photo.blurDataURL}
                       className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                     />
                   ) : (
@@ -57,8 +56,7 @@ export function Favorites({
       {storefront && (
         <a
           href={storefront.href || undefined}
-          data-link-id={storefront.id}
-          data-placement="favorites"
+          {...trackClick(storefront.id, 'favorites')}
           target="_blank"
           rel="noopener noreferrer"
           className="group mx-auto mt-[14svh] flex max-w-5xl items-center justify-between border-y border-ink/15 py-6 md:py-8"

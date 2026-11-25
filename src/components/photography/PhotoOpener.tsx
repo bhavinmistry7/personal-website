@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import Image from 'next/image'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { m, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import type { Photo } from '@/lib/photos'
 
 /**
@@ -24,28 +24,26 @@ export function PhotoOpener({ photo, caption }: { photo: Photo; caption: string 
       alt={caption}
       fill
       sizes="100vw"
-      placeholder="blur"
-      blurDataURL={photo.blurDataURL}
       className="object-cover"
     />
   )
 
   if (reduced) {
-    return <div className="relative h-svh">{img}</div>
+    return <div className="relative h-svh" style={{ backgroundColor: photo.color }}>{img}</div>
   }
 
   return (
     <div ref={ref} className="relative h-[220svh]">
       <div className="sticky top-0 h-svh overflow-hidden">
-        <motion.div className="absolute inset-0 will-change-[clip-path]" style={{ clipPath }}>
-          <motion.div className="absolute inset-0" style={{ scale }}>{img}</motion.div>
-        </motion.div>
-        <motion.p
+        <m.div className="absolute inset-0 will-change-[clip-path]" style={{ clipPath, backgroundColor: photo.color }}>
+          <m.div className="absolute inset-0" style={{ scale }}>{img}</m.div>
+        </m.div>
+        <m.p
           className="label absolute bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap text-white"
           style={{ opacity: capShow }}
         >
           {caption}
-        </motion.p>
+        </m.p>
       </div>
     </div>
   )

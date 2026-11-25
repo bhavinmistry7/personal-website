@@ -1,3 +1,4 @@
+import { trackClick } from '@/lib/track'
 import { links, visible, isPending, type LinkItem } from '@/content/site'
 import { ArrowUpRight } from './Icons'
 
@@ -20,8 +21,7 @@ export function LinkList() {
             <li key={link.id} className="py-1.5">
               <a
                 href={link.href || undefined}
-                data-link-id={link.id}
-                data-placement="hero"
+                {...trackClick(link.id, 'hero')}
                 target="_blank"
                 rel={rel(link)}
                 className="chrome-fill group flex h-12 items-center justify-between rounded-[3px] px-3.5 text-ink transition-transform duration-300 ease-out active:scale-[0.985]"
@@ -44,18 +44,17 @@ export function LinkList() {
           <li key={link.id} className="border-t border-white/15 last:border-b">
             <a
               href={link.href || undefined}
-              data-link-id={link.id}
-              data-placement="hero"
+              {...trackClick(link.id, 'hero')}
               target="_blank"
               rel={rel(link)}
               className="group -mx-2 flex h-12 items-center justify-between px-2 transition-colors duration-200 hover:bg-white/[0.06] active:bg-white/10"
             >
               <span className="flex items-baseline gap-3">
-                <span className="font-mono text-micro text-white/40">{n}</span>
+                <span className="font-mono text-micro text-white/60">{n}</span>
                 <span className="text-[12px] font-medium uppercase tracking-[0.06em]">{link.label}</span>
                 {pending && <span className="todo-tag">todo</span>}
               </span>
-              <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.06em] text-white/50 transition-colors group-hover:text-white">
+              <span className="flex items-center gap-2 text-[11px] uppercase tracking-[0.06em] text-white/75 transition-colors group-hover:text-white">
                 {link.handle}
                 <ArrowUpRight className="transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </span>

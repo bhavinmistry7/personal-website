@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, type Variants } from 'framer-motion'
+import { m, type Variants } from 'framer-motion'
 
 const EASE = [0.16, 1, 0.3, 1] as const
 
@@ -9,7 +9,7 @@ const line: Variants = {
   shown:  (delay: number) => ({ y: '0%', transition: { duration: 1.1, ease: EASE, delay } }),
 }
 
-const tags = { h2: motion.h2, h3: motion.h3, div: motion.div, p: motion.p }
+const tags = { h2: m.h2, h3: m.h3, div: m.div, p: m.p }
 
 /**
  * Line-mask reveal: text rises from behind a clipped edge once it enters view.
@@ -37,9 +37,9 @@ export function MaskReveal({
       whileInView="shown"
       viewport={{ once: true, margin: '0px 0px -10% 0px' }}
     >
-      <motion.span className="block" variants={line} custom={delay}>
+      <m.span className="block" variants={line} custom={delay}>
         {children}
-      </motion.span>
+      </m.span>
     </Tag>
   )
 }
